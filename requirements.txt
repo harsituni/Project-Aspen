@@ -1,0 +1,29 @@
+# Project Aspen: Timberland Acquisition Analysis
+# Tested on Python 3.10.0 (Windows). Python 3.10+ required.
+# Monetary figures are real CAD.
+
+# Core numerics / data
+numpy>=1.24,<3
+pandas>=2.0
+scipy>=1.10
+pyyaml>=6.0
+
+# Charting
+matplotlib>=3.7
+
+# Market data
+yfinance>=0.2.40
+stats-can>=2.6          # Statistics Canada CPI (table 18-10-0004-01)
+pandas-datareader>=0.10 # FRED CPIAUCSL fallback
+
+# Deliverables
+openpyxl>=3.1           # Excel workbook with live formulas
+python-pptx>=0.6.23     # Investment committee deck
+qrcode[pil]>=7.4        # QR code on the portfolio page
+
+# Tests
+pytest>=7.4
+formulas>=1.2         # evaluates the workbook's Excel formulas so they can be
+                      # checked against the Python model (see tests/test_excel_consistency.py)
+pymupdf>=1.24         # reads back the portfolio page to check its size, text and
+                      # greyscale rendering; the build degrades gracefully without it

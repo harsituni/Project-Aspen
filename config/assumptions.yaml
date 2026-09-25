@@ -1,0 +1,299 @@
+# =====================================================================
+# Project Aspen: Timberland Acquisition Analysis
+# Single source of truth for every numeric assumption in the model.
+#
+# HYPOTHETICAL TRACT. The property does not exist. Nothing here comes
+# from, or represents the views of, any employer or asset manager.
+#
+# Schema: every leaf is a record with
+#   value:  the number (rates are stored as decimal fractions)
+#   unit:   what the number is measured in
+#   source: a real, checkable source, or "Illustrative assumption"
+#   note:   one line on why this value was chosen
+#
+# If the source field does not name a real document, the number is an
+# invention for portfolio purposes and must not be relied upon.
+# Monetary figures are real CAD.
+# =====================================================================
+
+meta:
+  project_name:
+    value: "Project Aspen"
+    unit: "text"
+    source: "Illustrative assumption"
+    note: "Internal code name for the hypothetical transaction."
+  disclaimer:
+    value: "Hypothetical, for portfolio purposes only"
+    unit: "text"
+    source: "Illustrative assumption"
+    note: "Printed on every deliverable so no reader mistakes this for a live deal."
+  analyst:
+    value: "Harsit Baral"
+    unit: "text"
+    source: "Illustrative assumption"
+    note: "Author of the analysis."
+  base_currency:
+    value: "CAD"
+    unit: "text"
+    source: "Illustrative assumption"
+    note: "All dollar figures are real (constant) Canadian dollars unless stated otherwise."
+  valuation_basis:
+    value: "Real (constant dollars)"
+    unit: "text"
+    source: "Illustrative assumption"
+    note: "Real cash flows discounted at a real rate; inflation nets out of both sides."
+
+# ---------------------------------------------------------------------
+# TRACT: physical description of the asset
+# ---------------------------------------------------------------------
+tract:
+  location:
+    value: "Boreal mixedwood, north-central Alberta"
+    unit: "text"
+    source: "Illustrative assumption"
+    note: "Hypothetical location chosen to make the growth and risk assumptions plausible."
+  area_ha:
+    value: 20000
+    unit: "hectares"
+    source: "Illustrative assumption"
+    note: "Total productive freehold area; assumed fully operable with road access."
+  age_class_distribution_ha:
+    value:
+      "0-9": 900
+      "10-19": 1100
+      "20-29": 1400
+      "30-39": 1700
+      "40-49": 2000
+      "50-59": 2600
+      "60-69": 3400
+      "70-79": 3200
+      "80-89": 2300
+      "90-99": 1400
+    unit: "hectares per 10-year age class"
+    source: "Illustrative assumption"
+    note: "Uneven and skewed to mature classes, typical of a tract with limited recent harvesting; sums to 20,000 ha."
+  species_mix:
+    value: "White spruce / trembling aspen mixedwood"
+    unit: "text"
+    source: "Illustrative assumption"
+    note: "Drives the choice of a single aggregate yield curve rather than species-specific curves."
+
+# ---------------------------------------------------------------------
+# GROWTH: Chapman-Richards yield curve  V(T) = a * (1 - e^(-b*T))^c
+# ---------------------------------------------------------------------
+growth:
+  chapman_richards_a:
+    value: 350.0
+    unit: "m3 per hectare"
+    source: "Illustrative assumption"
+    note: "Asymptotic maximum merchantable volume the stand approaches at old age."
+  chapman_richards_b:
+    value: 0.03
+    unit: "per year"
+    source: "Illustrative assumption"
+    note: "Growth rate parameter; larger b means the stand approaches the asymptote sooner."
+  chapman_richards_c:
+    value: 3.0
+    unit: "dimensionless"
+    source: "Illustrative assumption"
+    note: "Shape parameter; c > 1 produces the S-curve with slow juvenile growth."
+  max_modelled_age:
+    value: 150
+    unit: "years"
+    source: "Illustrative assumption"
+    note: "Upper bound for the age axis in the rotation search and the Excel growth table."
+
+# ---------------------------------------------------------------------
+# PRICES AND OPERATING COSTS
+# ---------------------------------------------------------------------
+economics:
+  net_stumpage_price:
+    value: 48.0
+    unit: "CAD per m3"
+    source: "Illustrative assumption"
+    note: "Delivered log price net of harvest, haul and road costs, i.e. what accrues to the landowner."
+  real_price_growth:
+    value: 0.005
+    unit: "fraction per year"
+    source: "Illustrative assumption"
+    note: "0.5% real annual stumpage appreciation; deliberately conservative versus long-run commodity trends."
+  regeneration_cost:
+    value: 400.0
+    unit: "CAD per hectare"
+    source: "Illustrative assumption"
+    note: "Site preparation, planting and early tending, charged in the year a stand is harvested."
+  management_cost:
+    value: 8.0
+    unit: "CAD per hectare per year"
+    source: "Illustrative assumption"
+    note: "Extensive management: property tax, roads, inventory, protection and overhead."
+
+# ---------------------------------------------------------------------
+# TRANSACTION AND DISCOUNTING
+# ---------------------------------------------------------------------
+dcf:
+  purchase_price:
+    value: 92000000.0
+    unit: "CAD"
+    source: "Illustrative assumption"
+    note: "Assumed all-cash asking price for the tract (CAD 4,600 per hectare); the model tests whether it is justified."
+  acquisition_cost_pct:
+    value: 0.010
+    unit: "fraction of purchase price"
+    source: "Illustrative assumption"
+    note: "Legal, survey, timber cruise and closing costs paid at year 0."
+  real_discount_rate:
+    value: 0.06
+    unit: "fraction per year"
+    source: "Illustrative assumption"
+    note: "6.0% real unlevered discount rate for a core private timberland asset."
+  hurdle_rate:
+    value: 0.06
+    unit: "fraction per year"
+    source: "Illustrative assumption"
+    note: "Set equal to the discount rate so that NPV > 0 and IRR > hurdle give the same buy signal."
+  holding_period_years:
+    value: 30
+    unit: "years"
+    source: "Illustrative assumption"
+    note: "Fund-style 30-year hold, after which the tract is assumed sold."
+  even_flow_tolerance:
+    value: 0.15
+    unit: "fraction of mean annual harvest"
+    source: "Illustrative assumption"
+    note: "Annual harvest must stay within +/-15% of the 30-year average, mimicking a mill supply agreement."
+  min_harvest_age:
+    value: 20
+    unit: "years"
+    source: "Illustrative assumption"
+    note: "Floor on merchantability: stands younger than this are never cut, even to defend the even-flow target."
+  min_ending_inventory_multiple:
+    value: 1.0
+    unit: "multiple of regulated growing stock"
+    source: "Illustrative assumption"
+    note: "Standing volume at exit must be at least the growing stock of a fully regulated forest, so the buyer inherits a going concern rather than cut-over land."
+  disposition_cost_pct:
+    value: 0.015
+    unit: "fraction of terminal value"
+    source: "Illustrative assumption"
+    note: "Brokerage and closing costs deducted from the exit proceeds."
+  terminal_value_method:
+    value: "Bare land expectation value plus discounted value of standing inventory"
+    unit: "text"
+    source: "Illustrative assumption"
+    note: "Exit priced as a rational buyer would: perpetual land value plus the timber standing on it at year 30."
+
+# ---------------------------------------------------------------------
+# MONTE CARLO RISK PARAMETERS
+# ---------------------------------------------------------------------
+monte_carlo:
+  n_simulations:
+    value: 10000
+    unit: "paths"
+    source: "Illustrative assumption"
+    note: "Enough paths that the reported percentiles are stable to roughly 0.1 percentage points of IRR."
+  random_seed:
+    value: 42
+    unit: "integer"
+    source: "Illustrative assumption"
+    note: "Fixed so every rerun of run_all.py reproduces the published numbers exactly."
+  price_volatility:
+    value: 0.22
+    unit: "annual standard deviation of log price"
+    source: "Illustrative assumption"
+    note: "22% annual volatility, in the range historically shown by North American sawlog and lumber prices."
+  mean_reversion_speed:
+    value: 0.25
+    unit: "per year"
+    source: "Illustrative assumption"
+    note: "Ornstein-Uhlenbeck kappa; a price shock decays with a half-life of about 2.8 years."
+  disturbance_probability:
+    value: 0.02
+    unit: "fraction per year"
+    source: "Illustrative assumption"
+    note: "Annual chance of a stand-replacing wildfire or pest outbreak somewhere on the tract."
+  disturbance_severity_mean:
+    value: 0.06
+    unit: "fraction of standing volume destroyed"
+    source: "Illustrative assumption"
+    note: "Mean share of inventory lost when an event occurs; drawn from a Beta distribution, so severity varies."
+  disturbance_severity_concentration:
+    value: 25.0
+    unit: "dimensionless"
+    source: "Illustrative assumption"
+    note: "Beta concentration; set so the median event burns about 5% of the tract and a 1-in-100 event about 21%, rather than producing implausible whole-tract losses."
+  flexible_band_usage:
+    value: 1.0
+    unit: "fraction of the even-flow band"
+    source: "Illustrative assumption"
+    note: "How much of the permitted +/-15% latitude the flexible strategy uses; 1.0 means it swings to the full band edge, cutting less when prices are weak and more when they are strong."
+
+# ---------------------------------------------------------------------
+# CARBON UPSIDE (scenario, off by default)
+# ---------------------------------------------------------------------
+carbon:
+  enabled:
+    value: false
+    unit: "boolean"
+    source: "Illustrative assumption"
+    note: "Off in the base case; the base recommendation must stand on timber economics alone."
+  price_per_tonne:
+    value: 65.0
+    unit: "CAD per tonne CO2e"
+    source: "Illustrative assumption"
+    note: "Assumed net price received for a verified removal credit, after verification and registry fees."
+  sequestration_rate:
+    value: 3.0
+    unit: "tonnes CO2e per hectare per year"
+    source: "Illustrative assumption"
+    note: "Net creditable sequestration on the unharvested area; deliberately below gross biological uptake."
+  eligible_area_fraction:
+    value: 0.50
+    unit: "fraction of tract area"
+    source: "Illustrative assumption"
+    note: "Share of the tract assumed to qualify for a credited improved-forest-management project."
+
+# ---------------------------------------------------------------------
+# MARKET ANALYSIS: tickers and settings (the data itself is real)
+# ---------------------------------------------------------------------
+market:
+  timber_proxies:
+    value: ["WY", "RYN", "ADN.TO"]
+    unit: "Yahoo Finance tickers"
+    source: "Yahoo Finance via the yfinance package"
+    note: "Listed timberland owners used as public proxies. PCH (PotlatchDeltic) was the third proxy originally but no longer returns quotes after its combination with Rayonier, so Acadian Timber (ADN.TO) replaces it and has the advantage of being Canadian."
+  farmland_proxies:
+    value: ["LAND", "FPI"]
+    unit: "Yahoo Finance tickers"
+    source: "Yahoo Finance via the yfinance package"
+    note: "Listed farmland REITs; the farmland half of a renewable resources mandate."
+  equity_benchmarks:
+    value: ["^GSPTSE", "^GSPC"]
+    unit: "Yahoo Finance tickers"
+    source: "Yahoo Finance via the yfinance package"
+    note: "S&P/TSX Composite and S&P 500 as the traditional equity comparison."
+  bond_proxy:
+    value: "XBB.TO"
+    unit: "Yahoo Finance ticker"
+    source: "Yahoo Finance via the yfinance package"
+    note: "iShares Core Canadian Universe Bond Index ETF; AGG is used if XBB.TO returns no data."
+  bond_proxy_fallback:
+    value: "AGG"
+    unit: "Yahoo Finance ticker"
+    source: "Yahoo Finance via the yfinance package"
+    note: "US aggregate bond ETF, used only if the Canadian series is unavailable."
+  rolling_window_months:
+    value: 36
+    unit: "months"
+    source: "Illustrative assumption"
+    note: "Standard three-year window for rolling correlation; long enough to be stable, short enough to show regime shifts."
+  cpi_primary_table:
+    value: "18-10-0004-01"
+    unit: "Statistics Canada table number"
+    source: "Statistics Canada table 18-10-0004-01, Consumer Price Index, monthly"
+    note: "Primary inflation series, retrieved through the stats_can package."
+  cpi_fallback_series:
+    value: "CPIAUCSL"
+    unit: "FRED series ID"
+    source: "U.S. Bureau of Labor Statistics via FRED series CPIAUCSL"
+    note: "US CPI, used only if the Statistics Canada request fails; the deliverables state which source was used."

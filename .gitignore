@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Cached market data is regenerable, but keeping it makes offline reruns work.
+# Comment the next line out if you want reruns to be reproducible without a network.
+# data/raw/
+
+data/processed/
+~$*.xlsx
+~$*.pptx
+.DS_Store
+Thumbs.db
+STUDY_GUIDE.md
